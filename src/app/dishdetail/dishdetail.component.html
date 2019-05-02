@@ -29,16 +29,11 @@
 
   <div fxFlex="40">
     <mat-list *ngIf="dish">
-      <!-- h3 and mat-list-item need to use bootstrap class="mb-5" or style="margin-bottom: 50px;" -->
-      <h3 class="mb-5">Comments</h3>    
-        <mat-list-item *ngFor="let comment of dish.comments" class="mb-5">
-          <p>
-            <span>{{comment.comment}}</span>
-            <br>
-            <span>{{comment.rating}} Stars</span>
-            <br>
-            <span>-- {{comment.author}} {{ comment.date | date}}</span>
-          </p>
+      <h3>Comments</h3>    
+        <mat-list-item *ngFor="let comment of dish.comments">
+          <p matLine>{{comment.comment}}</p>
+          <p matLine>{{comment.rating}} Stars</p>
+          <p matLine>-- {{comment.author}} {{ comment.date | date}}</p>
         </mat-list-item>
       </mat-list>
   </div>
