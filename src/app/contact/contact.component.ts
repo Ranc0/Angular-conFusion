@@ -11,7 +11,7 @@ import { flyInOut, expand } from '../animations/app.animation';
   host: {
     '[@flyInOut]': 'true',
     'style': 'display: block;'
-    },
+  },
   animations: [
     flyInOut(),
     expand()
@@ -24,6 +24,9 @@ export class ContactComponent implements OnInit {
   feedbackErrMess: string;
   submitFeedback: Feedback;
   contactType = ContactType;
+  showSpinner = false;
+  showForm = true;
+  showFeedback = false;
   @ViewChild('fform') feedbackFormDirective;
 
   formErrors = {
@@ -76,7 +79,7 @@ export class ContactComponent implements OnInit {
     this.feedbackForm.valueChanges
       .subscribe(data => this.onValueChanged(data));
 
-    this.onValueChanged(); //(re)set form validation messages
+    this.onValueChanged(); // (re)set form validation messages
   }
 
   onValueChanged(data?: any) {
@@ -100,6 +103,8 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
+    this.showForm = false;
+    this.showSpinner = true;
     this.feedback = this.feedbackForm.value;
     console.log(this.feedback);
     this.feedbackForm.reset({
@@ -113,10 +118,18 @@ export class ContactComponent implements OnInit {
     });
 
     this.feedbackService.submitFeedback(this.feedback)
-      .subscribe(feedback => this.submitFeedback = feedback,
+      .subscribe(feedback => {
+          this.submitFeedback = feedback;
+          this.showSpinner = false;
+          this.showFeedback = true;
+        },
         errmess => this.feedbackErrMess = <any>errmess);
-    setTimeout(() => {this.submitFeedback = null;}, 5000);
-    
+    setTimeout(() => {
+      this.submitFeedback = null;
+      this.showFeedback = false;
+      this.showForm = true;
+    }, 5000);
+
     this.feedbackFormDirective.resetForm();
   }
 }
